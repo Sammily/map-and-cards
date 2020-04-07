@@ -9,7 +9,8 @@
  * https://www.amcharts.com/docs/v4/
  * ---------------------------------------
  */
-
+import cards from "./cards.js";
+let massLat = [];
 // Создание экземпляра карты
 var chart = am4core.create("chartdiv", am4maps.MapChart);
 
@@ -41,18 +42,6 @@ lineSeries.mapLines.template.stroke = am4core.color("#e03e96");
 lineSeries.mapLines.template.nonScalingStroke = true;
 
 var line = lineSeries.mapLines.create();
-line.multiGeoLine = [
-  [
-    { latitude: 41.3888, longitude: 2.159, title: "Barcelona" }, //Barcelona
-    { latitude: 40.4165, longitude: -3.7026, title: "Madrid" }, //Madrid
-    { latitude: 59.3326, longitude: 18.0649, title: "Stockholm" }, //Stockholm
-    { latitude: 40.7143, longitude: -74.006, title: "New York" }, //New York
-    { latitude: 67.5641, longitude: 33.4031, title: "Apatity" }, //Apatity
-    { latitude: 59.9127, longitude: 10.7461, title: "Oslo" }, //Oslo
-    { latitude: 52.5244, longitude: 13.4105, title: "Berlin" }, //Berlin
-    { latitude: 51.51, longitude: -0.13, title: "London" } //London
-  ]
-];
 
 //самолетик
 /*
@@ -108,34 +97,21 @@ circle.fill = am4core.color("#FFFFFF");
 circle.stroke = am4core.color("#e03e96");
 circle.strokeWidth = 2;
 circle.nonScaling = true;
-circle.tooltipText = "{title}";
+//circle.tooltipText = "{title}";
 
 // Set property fields
 imageSeriesTemplate.propertyFields.latitude = "latitude";
 imageSeriesTemplate.propertyFields.longitude = "longitude";
 
-// Add data for the three cities
-imageSeries.data = [
-  { latitude: 41.3888, longitude: 2.159, title: "Barcelona" }, //Barcelona
-  { latitude: 40.4165, longitude: -3.7026, title: "Madrid" }, //Madrid
-  { latitude: 59.3326, longitude: 18.0649, title: "Stockholm" }, //Stockholm
-  { latitude: 40.7143, longitude: -74.006, title: "New York" }, //New York
-  { latitude: 67.5641, longitude: 33.4031, title: "Apatity" }, //Apatity
-  { latitude: 59.9127, longitude: 10.7461, title: "Oslo" }, //Oslo
-  { latitude: 52.5244, longitude: 13.4105, title: "Berlin" }, //Berlin
-  { latitude: 51.51, longitude: -0.13, title: "London" } //London
-];
-
-import cards from "./cards.js";
 //Собираем в массив все места прибытия
 const createMass = (items, par) => {
   let mass = [];
 
   if (par === "to") {
-    items.map(item => mass.push(item.to));
+    items.map((item) => mass.push(item.to));
   }
   if (par === "from") {
-    items.map(item => mass.push(item.from));
+    items.map((item) => mass.push(item.from));
   }
 
   return mass;
@@ -149,17 +125,17 @@ function diffMass(mass1, mass2) {
   return [...diff(mass1, mass2)];
 
   function diff(a, b) {
-    return a.filter(item => b.indexOf(item) === -1);
+    return a.filter((item) => b.indexOf(item) === -1);
   }
 }
 let res = diffMass(massFrom, massTo);
-console.log(res);
+//console.log(res);
 
 //Получаем индекс элемента начала пути
-const indexN = massFrom.findIndex(zn => {
+const indexN = massFrom.findIndex((zn) => {
   return zn == res;
 });
-console.log(indexN);
+//console.log(indexN);
 
 //Даем обьектам свойство позиция, по которому после отсортируем карточки в цепочку
 cards[indexN].position = 1;
@@ -170,7 +146,7 @@ let indexTek = indexN; //индекс текущего элемента, изн�
 let i = 2; //номер позиции, изначально 2 т.к. 1 мы уже дали первой карточке в цепочке
 let k; //хранит индекс следующего элемента в цепочке
 for (let j = 0; j < cards.length; j++) {
-  cards.forEach(zn => {
+  cards.forEach((zn) => {
     if (zn.from === cards[indexTek].to) {
       k = cards.indexOf(zn);
 
@@ -182,7 +158,7 @@ for (let j = 0; j < cards.length; j++) {
 }
 
 //Сортируем карточки в цепочку
-const sortStart = items => {
+const sortStart = (items) => {
   return items.sort((obj1, obj2) => {
     if (obj1.position < obj2.position) return -1;
     if (obj1.position > obj2.position) return 1;
@@ -191,11 +167,11 @@ const sortStart = items => {
 };
 
 //Собираем карточки в массив строк
-const ArrSt = items => {
+const ArrSt = (items) => {
   let str = "";
   let result = [];
 
-  items.map(item => {
+  items.map((item) => {
     str = `${item.position}. From ${item.from}, take ${item.type}`;
 
     if (item.number !== "") {
@@ -223,7 +199,30 @@ const ArrSt = items => {
   return result;
 };
 
+///
+
+const createGeoDate = (items) => {
+  let mass = [];
+
+  items.map((item) =>
+    mass.push({ latitude: item.latitude, longitude: item.longitude })
+  );
+
+  mass.push({
+    latitude: items[items.length - 1].latitude_to,
+    longitude: items[items.length - 1].longitude_to,
+  });
+  return mass;
+};
+
 const resultWay = ArrSt(sortStart(cards));
 
+massLat = createGeoDate(cards);
+
+//рисуем линию и точки
+line.multiGeoLine = [massLat];
+imageSeries.data = massLat;
+
+//рисуем готовый путь в html
 let way = document.getElementById("way");
 way.innerHTML = resultWay.join("<br>");

@@ -131,7 +131,9 @@ var cards = [{
   number: "SK455",
   seat: "3A",
   gate: "45B",
-  additional: ""
+  additional: "",
+  latitude: 40.4165,
+  longitude: -3.7026
 }, {
   from: "Apatity",
   to: "Oslo",
@@ -139,7 +141,9 @@ var cards = [{
   number: "",
   seat: "",
   gate: "",
-  additional: ""
+  additional: "",
+  latitude: 67.5641,
+  longitude: 33.4031
 }, {
   from: "Stockholm",
   to: "New York",
@@ -147,7 +151,9 @@ var cards = [{
   number: "SK22",
   seat: "7B",
   gate: "22",
-  additional: ""
+  additional: "",
+  latitude: 59.3326,
+  longitude: 18.0649
 }, {
   from: "Barcelona",
   to: "Madrid",
@@ -155,7 +161,23 @@ var cards = [{
   number: "",
   seat: "",
   gate: "",
-  additional: ""
+  additional: "",
+  latitude: 41.3888,
+  longitude: 2.159
+}, {
+  from: "London",
+  to: "Dublin",
+  type: "train",
+  number: "677A",
+  seat: "40",
+  gate: "",
+  additional: "",
+  //from
+  latitude: 51.51,
+  longitude: -0.13,
+  //to
+  latitude_to: 53.344,
+  longitude_to: -6.2672
 }, {
   from: "Oslo",
   to: "Berlin",
@@ -163,7 +185,9 @@ var cards = [{
   number: "",
   seat: "15B",
   gate: "",
-  additional: ""
+  additional: "",
+  latitude: 59.9127,
+  longitude: 10.7461
 }, {
   from: "New York",
   to: "Apatity",
@@ -171,7 +195,9 @@ var cards = [{
   number: "",
   seat: "17D",
   gate: "",
-  additional: ""
+  additional: "",
+  latitude: 40.7143,
+  longitude: -74.006
 }, {
   from: "Berlin",
   to: "London",
@@ -179,7 +205,13 @@ var cards = [{
   number: "78A",
   seat: "45B",
   gate: "",
-  additional: ""
+  additional: "",
+  //from
+  latitude: 52.5244,
+  longitude: 13.4105,
+  //to
+  latitude_to: 51.51,
+  longitude_to: -0.13
 }];
 var _default = cards;
 exports.default = _default;
@@ -202,18 +234,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-/**
- * ---------------------------------------
- * This demo was created using amCharts 4.
- *
- * For more information visit:
- * https://www.amcharts.com/
- *
- * Documentation is available at:
- * https://www.amcharts.com/docs/v4/
- * ---------------------------------------
- */
-// Создание экземпляра карты
+var massLat = []; // Создание экземпляра карты
+
 var chart = am4core.create("chartdiv", am4maps.MapChart); // Установка свойства geodata экземпляра карты
 
 chart.geodata = am4geodata_worldLow; // Установка проекции (типа) карты - Miller
@@ -235,48 +257,7 @@ var lineSeries = chart.series.push(new am4maps.MapLineSeries());
 lineSeries.mapLines.template.strokeWidth = 4;
 lineSeries.mapLines.template.stroke = am4core.color("#e03e96");
 lineSeries.mapLines.template.nonScalingStroke = true;
-var line = lineSeries.mapLines.create();
-line.multiGeoLine = [[{
-  latitude: 41.3888,
-  longitude: 2.159,
-  title: "Barcelona"
-}, //Barcelona
-{
-  latitude: 40.4165,
-  longitude: -3.7026,
-  title: "Madrid"
-}, //Madrid
-{
-  latitude: 59.3326,
-  longitude: 18.0649,
-  title: "Stockholm"
-}, //Stockholm
-{
-  latitude: 40.7143,
-  longitude: -74.006,
-  title: "New York"
-}, //New York
-{
-  latitude: 67.5641,
-  longitude: 33.4031,
-  title: "Apatity"
-}, //Apatity
-{
-  latitude: 59.9127,
-  longitude: 10.7461,
-  title: "Oslo"
-}, //Oslo
-{
-  latitude: 52.5244,
-  longitude: 13.4105,
-  title: "Berlin"
-}, //Berlin
-{
-  latitude: 51.51,
-  longitude: -0.13,
-  title: "London"
-} //London
-]]; //самолетик
+var line = lineSeries.mapLines.create(); //самолетик
 
 /*
 // Add a map object to line
@@ -330,55 +311,12 @@ circle.radius = 4;
 circle.fill = am4core.color("#FFFFFF");
 circle.stroke = am4core.color("#e03e96");
 circle.strokeWidth = 2;
-circle.nonScaling = true;
-circle.tooltipText = "{title}"; // Set property fields
+circle.nonScaling = true; //circle.tooltipText = "{title}";
+// Set property fields
 
 imageSeriesTemplate.propertyFields.latitude = "latitude";
-imageSeriesTemplate.propertyFields.longitude = "longitude"; // Add data for the three cities
+imageSeriesTemplate.propertyFields.longitude = "longitude"; //Собираем в массив все места прибытия
 
-imageSeries.data = [{
-  latitude: 41.3888,
-  longitude: 2.159,
-  title: "Barcelona"
-}, //Barcelona
-{
-  latitude: 40.4165,
-  longitude: -3.7026,
-  title: "Madrid"
-}, //Madrid
-{
-  latitude: 59.3326,
-  longitude: 18.0649,
-  title: "Stockholm"
-}, //Stockholm
-{
-  latitude: 40.7143,
-  longitude: -74.006,
-  title: "New York"
-}, //New York
-{
-  latitude: 67.5641,
-  longitude: 33.4031,
-  title: "Apatity"
-}, //Apatity
-{
-  latitude: 59.9127,
-  longitude: 10.7461,
-  title: "Oslo"
-}, //Oslo
-{
-  latitude: 52.5244,
-  longitude: 13.4105,
-  title: "Berlin"
-}, //Berlin
-{
-  latitude: 51.51,
-  longitude: -0.13,
-  title: "London"
-} //London
-];
-
-//Собираем в массив все места прибытия
 var createMass = function createMass(items, par) {
   var mass = [];
 
@@ -410,13 +348,13 @@ function diffMass(mass1, mass2) {
   }
 }
 
-var res = diffMass(massFrom, massTo);
-console.log(res); //Получаем индекс элемента начала пути
+var res = diffMass(massFrom, massTo); //console.log(res);
+//Получаем индекс элемента начала пути
 
 var indexN = massFrom.findIndex(function (zn) {
   return zn == res;
-});
-console.log(indexN); //Даем обьектам свойство позиция, по которому после отсортируем карточки в цепочку
+}); //console.log(indexN);
+//Даем обьектам свойство позиция, по которому после отсортируем карточки в цепочку
 
 _cards.default[indexN].position = 1; //console.log(cards);
 //Присваиваем каждому обьекту свойство позиции в цепочке
@@ -478,9 +416,30 @@ var ArrSt = function ArrSt(items) {
     result.push(str);
   });
   return result;
+}; ///
+
+
+var createGeoDate = function createGeoDate(items) {
+  var mass = [];
+  items.map(function (item) {
+    return mass.push({
+      latitude: item.latitude,
+      longitude: item.longitude
+    });
+  });
+  mass.push({
+    latitude: items[items.length - 1].latitude_to,
+    longitude: items[items.length - 1].longitude_to
+  });
+  return mass;
 };
 
 var resultWay = ArrSt(sortStart(_cards.default));
+massLat = createGeoDate(_cards.default); //рисуем линию и точки
+
+line.multiGeoLine = [massLat];
+imageSeries.data = massLat; //рисуем готовый путь в html
+
 var way = document.getElementById("way");
 way.innerHTML = resultWay.join("<br>");
 },{"./cards.js":"cards.js"}],"C:/Users/Sam/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -511,7 +470,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50233" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50521" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

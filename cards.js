@@ -6,7 +6,9 @@ const cards = [
     number: "SK455",
     seat: "3A",
     gate: "45B",
-    additional: ""
+    additional: "",
+    latitude: 40.4165,
+    longitude: -3.7026,
   },
   {
     from: "Apatity",
@@ -15,7 +17,9 @@ const cards = [
     number: "",
     seat: "",
     gate: "",
-    additional: ""
+    additional: "",
+    latitude: 67.5641,
+    longitude: 33.4031,
   },
   {
     from: "Stockholm",
@@ -24,7 +28,9 @@ const cards = [
     number: "SK22",
     seat: "7B",
     gate: "22",
-    additional: ""
+    additional: "",
+    latitude: 59.3326,
+    longitude: 18.0649,
   },
   {
     from: "Barcelona",
@@ -33,7 +39,24 @@ const cards = [
     number: "",
     seat: "",
     gate: "",
-    additional: ""
+    additional: "",
+    latitude: 41.3888,
+    longitude: 2.159,
+  },
+  {
+    from: "London",
+    to: "Dublin",
+    type: "train",
+    number: "677A",
+    seat: "40",
+    gate: "",
+    additional: "",
+    //from
+    latitude: 51.51,
+    longitude: -0.13,
+    //to
+    latitude_to: 53.344,
+    longitude_to: -6.2672,
   },
   {
     from: "Oslo",
@@ -42,7 +65,9 @@ const cards = [
     number: "",
     seat: "15B",
     gate: "",
-    additional: ""
+    additional: "",
+    latitude: 59.9127,
+    longitude: 10.7461,
   },
   {
     from: "New York",
@@ -51,7 +76,9 @@ const cards = [
     number: "",
     seat: "17D",
     gate: "",
-    additional: ""
+    additional: "",
+    latitude: 40.7143,
+    longitude: -74.006,
   },
   {
     from: "Berlin",
@@ -60,8 +87,14 @@ const cards = [
     number: "78A",
     seat: "45B",
     gate: "",
-    additional: ""
-  }
+    additional: "",
+    //from
+    latitude: 52.5244,
+    longitude: 13.4105,
+    //to
+    latitude_to: 51.51,
+    longitude_to: -0.13,
+  },
 ];
 
 export default cards;
